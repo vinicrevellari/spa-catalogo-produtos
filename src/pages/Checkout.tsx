@@ -8,10 +8,7 @@ export default function Checkout() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const total = items.reduce(
-    (acc, item) => acc + item.product.price * item.quantity,
-    0
-  );
+  const total = items.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
 
   function handleFinish() {
     setLoading(true);
@@ -19,14 +16,14 @@ export default function Checkout() {
       clearCart();
       toast.success("Pedido finalizado!");
       navigate("/");
-    }, 1500); // simula tempo de processamento
+    }, 1500);
   }
 
   useEffect(() => {
     if (items.length === 0) {
       navigate("/");
     }
-  }, [items]);
+  }, [items, navigate]);
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Finalizar Pedido</h1>
@@ -39,9 +36,7 @@ export default function Checkout() {
             {items.map((item) => (
               <li key={item.product.id} className="border p-4 rounded shadow">
                 <p className="font-semibold">{item.product.title}</p>
-                <p className="text-sm text-gray-600">
-                  Quantidade: {item.quantity}
-                </p>
+                <p className="text-sm text-gray-600">Quantidade: {item.quantity}</p>
                 <p className="text-sm font-medium text-green-700">
                   R$ {(item.product.price * item.quantity).toFixed(2)}
                 </p>
