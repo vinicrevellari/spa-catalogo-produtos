@@ -1,10 +1,12 @@
 import { useCart } from "../contexts/CartContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Checkout() {
   const { items, clearCart } = useCart();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const total = items.reduce(
     (acc, item) => acc + item.product.price * item.quantity,
@@ -12,10 +14,14 @@ export default function Checkout() {
   );
 
   function handleFinish() {
-    clearCart();
-    alert("Pedido finalizado com sucesso!");
-    navigate("/");
+    setLoading(true);
+    setTimeout(() => {
+      clearCart();
+      toast.success("Pedido finalizado!");
+      navigate("/");
+    }, 1500); // simula tempo de processamento
   }
+
   useEffect(() => {
     if (items.length === 0) {
       navigate("/");
@@ -47,9 +53,12 @@ export default function Checkout() {
 
           <button
             onClick={handleFinish}
-            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition-all"
+            disabled={loading}
+            className={`${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            } bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition`}
           >
-            Finalizar compra
+            {loading ? "Finalizando..." : "Finalizar pedido"}
           </button>
         </>
       )}
